@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Livewire\Builder\CourseBuilder;
 use App\Http\Livewire\Player;
+use App\Http\Controllers\Api\VideoProgressController;
 use Illuminate\Support\Facades\Broadcast;
 use App\Http\Controllers\ProvisionerController;
 use Illuminate\Support\Facades\Route;
@@ -31,6 +32,9 @@ Route::middleware('auth')->group(function () {
     // Provisioner (Admin)
     Route::view('/provisioner','provisioner.index')->name('provisioner');
     Route::post('/provisioner/save', [ProvisionerController::class,'save'])->name('provisioner.save');
+
+    // API progreso de video (usa sesión web)
+    Route::post('/api/video/progress', [VideoProgressController::class,'store'])->name('api.video.progress');
 });
 
 require __DIR__.'/auth.php';

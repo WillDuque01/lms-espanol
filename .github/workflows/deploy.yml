@@ -15,6 +15,7 @@ jobs:
         uses: SamKirkland/FTP-Deploy-Action@v4
         with:
           server: ${{ secrets.HOSTINGER_SFTP_SERVER }}
+          port: ${{ secrets.HOSTINGER_SFTP_PORT }}
           username: ${{ secrets.HOSTINGER_SFTP_USERNAME }}
           password: ${{ secrets.HOSTINGER_SFTP_PASSWORD }}
           protocol: sftp
@@ -32,12 +33,17 @@ jobs:
         uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.HOSTINGER_SSH_HOST }}
+          port: ${{ secrets.HOSTINGER_SSH_PORT }}
           username: ${{ secrets.HOSTINGER_SSH_USER }}
-          key: ${{ secrets.HOSTINGER_SSH_KEY }}
+          password: ${{ secrets.HOSTINGER_SSH_PASSWORD }}
           script: |
             cd ${{ secrets.HOSTINGER_PATH }}
-            php -d detect_unicode=0 composer.phar install --no-dev --prefer-dist --no-progress --no-interaction
+            if [ ! -f composer.phar ]; then curl -sS https://getcomposer.org/installer | php; fi
+            php composer.phar install --no-dev --prefer-dist --no-progress --no-interaction
+            php artisan config:cache
             php artisan migrate --force
+            php artisan route:cache
+            php artisan view:cache
             php artisan optimize
             php artisan storage:link || true
 
