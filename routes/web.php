@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Livewire\Builder\CourseBuilder;
 use App\Http\Livewire\Player;
 use Illuminate\Support\Facades\Broadcast;
+use App\Http\Controllers\ProvisionerController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -26,6 +27,10 @@ Route::middleware('auth')->group(function () {
     // Notificaciones básicas (placeholder UI)
     Route::view('/admin/notifications','notifications.index')->middleware('can:manage-settings');
     Route::view('/student/notifications','notifications.student');
+
+    // Provisioner (Admin)
+    Route::view('/provisioner','provisioner.index')->name('provisioner');
+    Route::post('/provisioner/save', [ProvisionerController::class,'save'])->name('provisioner.save');
 });
 
 require __DIR__.'/auth.php';
