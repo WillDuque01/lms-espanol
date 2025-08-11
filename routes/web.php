@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Livewire\Builder\CourseBuilder;
 use App\Http\Livewire\Player;
+use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -21,6 +22,10 @@ Route::middleware('auth')->group(function () {
     // Builder y Player
     Route::get('/courses/{course}/builder', CourseBuilder::class)->name('courses.builder');
     Route::get('/lessons/{lesson}/player', Player::class)->name('lessons.player');
+
+    // Notificaciones básicas (placeholder UI)
+    Route::view('/admin/notifications','notifications.index')->middleware('can:manage-settings');
+    Route::view('/student/notifications','notifications.student');
 });
 
 require __DIR__.'/auth.php';
