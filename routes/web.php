@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\GoogleController;
+use App\Http\Livewire\Builder\CourseBuilder;
+use App\Http\Livewire\Player;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -16,6 +18,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    // Builder y Player
+    Route::get('/courses/{course}/builder', CourseBuilder::class)->name('courses.builder');
+    Route::get('/lessons/{lesson}/player', Player::class)->name('lessons.player');
 });
 
 require __DIR__.'/auth.php';
